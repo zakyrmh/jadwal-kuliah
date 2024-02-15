@@ -14,69 +14,99 @@ const scheduleData: ScheduleItem[] = [
     mataKuliah: "Kimia Dasar",
     kodeRuangan: "FMA02202",
     hari: 1,
-    waktu: "2024-02-19T09:41:00",
+    waktu: "09:41:00",
   },
   {
     mataKuliah: "Pendidikan Agama",
     kodeRuangan: "DARING101",
     hari: 1,
-    waktu: "2024-02-19T13:20:00",
+    waktu: "13:20:00",
   },
   {
     mataKuliah: "Fisika Umum",
     kodeRuangan: "FMA02213",
     hari: 1,
-    waktu: "2024-02-19T16:20:00",
+    waktu: "16:20:00",
   },
   {
     mataKuliah: "Pengantar Kewirausahaan",
     kodeRuangan: "DARING101",
     hari: 2,
-    waktu: "2024-02-20T07:00:00",
+    waktu: "07:00:00",
   },
   {
     mataKuliah: "Bahasa Indonesia",
     kodeRuangan: "DARING101",
     hari: 2,
-    waktu: "2024-02-20T09:41:00",
+    waktu: "09:41:00",
   },
   {
     mataKuliah: "Pengantar Psikologi",
     kodeRuangan: "DARING101",
     hari: 2,
-    waktu: "2024-02-20T13:20:00",
+    waktu: "13:20:00",
   },
   {
     mataKuliah: "Fisika Umum",
     kodeRuangan: "FMA03321",
     hari: 3,
-    waktu: "2024-02-21T07:00:00",
+    waktu: "07:00:00",
   },
   {
     mataKuliah: "Kimia Dasar",
     kodeRuangan: "FMA04315",
     hari: 3,
-    waktu: "2024-02-21T13:20:00",
+    waktu: "13:20:00",
   },
   {
     mataKuliah: "Statistika",
     kodeRuangan: "FMA02203",
     hari: 4,
-    waktu: "2024-02-15T07:00:00",
+    waktu: "07:00:00",
   },
   {
     mataKuliah: "Bahasa Inggris untuk Kimia",
     kodeRuangan: "FMA02205",
     hari: 4,
-    waktu: "2024-02-15T16:20:00",
+    waktu: "16:20:00",
   },
   {
     mataKuliah: "Matematika Kimia",
     kodeRuangan: "FMA10206",
     hari: 5,
-    waktu: "2024-02-16T16:20:00",
+    waktu: "16:20:00",
   },
 ];
+
+// Fungsi untuk mendapatkan tanggal berdasarkan hari
+function getFutureDate(day: number): string {
+  const now = new Date();
+  const today = now.getDay();
+  const difference = day - today + (day <= today ? 7 : 0); // Tambahkan 7 jika hari sudah berlalu
+  const futureDate = new Date(now.setDate(now.getDate() + difference));
+  return futureDate.toISOString().split("T")[0];
+}
+
+// Fungsi untuk mengubah format waktu
+function formatTime(time: string): string {
+  const date = new Date();
+  const [hours, minutes, seconds] = time.split(":");
+  date.setHours(Number(hours), Number(minutes), Number(seconds));
+  return date.toISOString().split("T")[1];
+}
+
+// Memanipulasi data
+const manipulatedData: ScheduleItem[] = scheduleData.map((item) => {
+  const futureDate = getFutureDate(item.hari);
+  const formattedTime = formatTime(item.waktu);
+  const datetime = `${futureDate}T${formattedTime}`;
+  return {
+    ...item,
+    waktu: datetime,
+  };
+});
+
+console.log(manipulatedData);
 
 const Home: React.FC = () => {
   const [sortedScheduleData, setSortedScheduleData] = useState<ScheduleItem[]>(
@@ -84,11 +114,11 @@ const Home: React.FC = () => {
   );
 
   useEffect(() => {
-    const currentDayIndex = new Date().getDay();
-    const sortedData = [...scheduleData].sort((a, b) => {
-      const adjustedA = (a.hari - currentDayIndex + 7) % 7;
-      const adjustedB = (b.hari - currentDayIndex + 7) % 7;
-      return adjustedA - adjustedB;
+    const sortedData = [...manipulatedData].sort((a, b) => {
+      const dateA = new Date(a.waktu).getTime();
+      const dateB = new Date(b.waktu).getTime();
+
+      return dateA - dateB;
     });
 
     setSortedScheduleData(sortedData);
