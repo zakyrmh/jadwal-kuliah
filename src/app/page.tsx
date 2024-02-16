@@ -76,12 +76,6 @@ const scheduleData: ScheduleItem[] = [
     hari: 5,
     waktu: "16:20:00",
   },
-  {
-    mataKuliah: "Contoh",
-    kodeRuangan: "Contoh",
-    hari: 5,
-    waktu: "21:45:00",
-  },
 ];
 
 // Fungsi untuk mendapatkan tanggal berdasarkan hari
