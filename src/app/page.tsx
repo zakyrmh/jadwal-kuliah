@@ -76,37 +76,33 @@ const scheduleData: ScheduleItem[] = [
     hari: 5,
     waktu: "16:20:00",
   },
+  {
+    mataKuliah: "Contoh",
+    kodeRuangan: "Contoh",
+    hari: 5,
+    waktu: "21:45:00",
+  },
 ];
 
 // Fungsi untuk mendapatkan tanggal berdasarkan hari
 function getFutureDate(day: number): string {
   const now = new Date();
   const today = now.getDay();
-  const difference = day - today + (day <= today ? 7 : 0); // Tambahkan 7 jika hari sudah berlalu
+  const difference = day - today + (day < today ? 7 : 0); // Tambahkan 7 jika hari sudah berlalu
   const futureDate = new Date(now.setDate(now.getDate() + difference));
   return futureDate.toISOString().split("T")[0];
-}
-
-// Fungsi untuk mengubah format waktu
-function formatTime(time: string): string {
-  const date = new Date();
-  const [hours, minutes, seconds] = time.split(":");
-  date.setHours(Number(hours), Number(minutes), Number(seconds));
-  return date.toISOString().split("T")[1];
 }
 
 // Memanipulasi data
 const manipulatedData: ScheduleItem[] = scheduleData.map((item) => {
   const futureDate = getFutureDate(item.hari);
-  const formattedTime = formatTime(item.waktu);
+  const formattedTime = item.waktu;
   const datetime = `${futureDate}T${formattedTime}`;
   return {
     ...item,
     waktu: datetime,
   };
 });
-
-console.log(manipulatedData);
 
 const Home: React.FC = () => {
   const [sortedScheduleData, setSortedScheduleData] = useState<ScheduleItem[]>(
@@ -120,6 +116,7 @@ const Home: React.FC = () => {
 
       return dateA - dateB;
     });
+    console.log(sortedData);
 
     setSortedScheduleData(sortedData);
   }, []);
