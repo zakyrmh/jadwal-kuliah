@@ -30,8 +30,8 @@ const scheduleData = {
             "dosen": ["Rahmi Putri Kurnia"],
             "hari": "Selasa",
             "ruangan": "E209-A",
-            "jamMulai": "10:15",
-            "jamAkhir": "13:50"
+            "jamMulai": "13:50",
+            "jamAkhir": "15:30"
         },
         {
             "mataKuliah": "MKU - Agama",
